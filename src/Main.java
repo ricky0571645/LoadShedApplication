@@ -9,5 +9,7 @@ public class Main
 		System.out.println("Arduino Communication Program");
 		
 		System.out.println("Testing Github Compatablity");
+		
+		System.out.println("Testing whether Github can branch");
 	}
 }
