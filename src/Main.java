@@ -18,6 +18,7 @@ public class Main extends JFrame
 	private JPanel grid;
 	private SerialPort serialPort;
 	private boolean arduinoConnected;
+	private boolean hostIsSurface = true;
 	
 	public Main ()
 	{
@@ -68,7 +69,9 @@ public class Main extends JFrame
 		for(SerialPort port : ports)
 		{
 			System.out.println(port.getSystemPortName() + "\n");
-			if(port.getSystemPortName().equalsIgnoreCase("COM3"))
+			//For Ricky - COM4 if Surface, COM3 if Dell Laptop
+			if((hostIsSurface && port.getSystemPortName().equalsIgnoreCase("COM4")) ||
+					port.getSystemPortName().equalsIgnoreCase("COM4"))
 			{
 				//if the port name is COM3 then the Arduino is connected
 				arduinoConnected = true;
