@@ -8,7 +8,10 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import users.UserList;
+import users.User;//--------------FOR DEBUGGING-----------
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -58,9 +61,18 @@ public class Window_Credential extends JFrame
 	private static final int ROW4 = 3;
 	private static final int ROW5 = 4;
 	
+	//include the userlist that will be used to verify the incoming user
+	private UserList employeeList = new UserList();
+	
+	
 	//--------------FOR DEBUGGING-----------
 	//--------------------------------------
 	boolean clickedTwice = false;
+	private User employee1 = new User("Ricky", "Software Developer", 100, "ricky", "apple");
+	private User employee2 = new User("Justin", "Software Developer", 101, "justin", "pear");
+	private User employee3 = new User("Marshall", "Hardware Engineer", 102, "marshall", "berry");
+	private User employee4 = new User("Julio", "Hardware Engineer", 103, "julio", "grape");
+	
 	
 	//-----------------------------------------------------------------
 	//---------------------------GUI SETUP-----------------------------
@@ -162,7 +174,8 @@ public class Window_Credential extends JFrame
 	    constraint.gridy = ROW4;
 	    credentialPanel.add(submitButton, constraint);
 	    
-	    wrongCredentialsLabel = new JLabel("");
+	    wrongCredentialsLabel = new JLabel("Incorrect username/password combination.");
+	    wrongCredentialsLabel.setVisible(false);
 	    wrongCredentialsLabel.setForeground(Color.red);
   		constraint.fill = GridBagConstraints.NONE;
   		constraint.weightx = 0;
@@ -170,7 +183,7 @@ public class Window_Credential extends JFrame
 		constraint.ipadx = 10;
 	    constraint.ipady = 10;
   		insets.top = 15;
-	    insets.left = 0;
+	    insets.left = 10;
 	    constraint.gridx = 0;
 	    constraint.gridy = ROW5;
 	    credentialPanel.add(wrongCredentialsLabel, constraint);
@@ -184,9 +197,9 @@ public class Window_Credential extends JFrame
 		setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//---------FOUND ONLINE TO CENTER PROGRAM ON SCREEN------
-		Toolkit tk = Toolkit.getDefaultToolkit();
-	    Dimension screenSize = tk.getScreenSize();
+		//center the GUI on the screen
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+	    Dimension screenSize = toolkit.getScreenSize();
 	    int screenHeight = screenSize.height;
 	    int screenWidth = screenSize.width;
 	    setLocation(screenWidth / 4, screenHeight / 4);
@@ -194,28 +207,49 @@ public class Window_Credential extends JFrame
 		//-----------------------------------------------------------------
 		//---------------------------BUTTON ACTION-------------------------
 		//-----------------------------------------------------------------
-		submitButton.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
-				wrongCredentialsLabel.setText("Incorrect username/password combination.");
-				
-				if(clickedTwice)
+	    
+	    
+	    employeeList.addUser(employee1);//--------------FOR DEBUGGING-----------
+	    employeeList.addUser(employee2);//--------------FOR DEBUGGING-----------
+	    employeeList.addUser(employee3);//--------------FOR DEBUGGING-----------
+	    employeeList.addUser(employee4);//--------------FOR DEBUGGING-----------
+	    Action action = new AbstractAction()
+	    {
+	        public void actionPerformed(ActionEvent e)
+	        {
+	        	//click twice for debug//--------------FOR DEBUGGING-----------
+				if(clickedTwice || employeeList.isValidUser(usernameField.getText(), passwordField.getText()))
 				{
 					controlPanel = new Window_Control();
 					cards.add(controlPanel, "controlPanel");
 					controlPanel.setTester(tester);
 					swapView("controlPanel");
-					setSize(300, 400);
+					setSize(600, 500);
 					setVisible(true);
 					setResizable(true);
+					resetWindow();
+				}
+				else
+				{
+					resetWindow();
+					wrongCredentialsLabel.setVisible(true);
 				}
 				
-				clickedTwice = true;
-				
-			}
-		});
+				clickedTwice = true;//--------------FOR DEBUGGING-----------
+	        }
+	    };
+	    
+	    passwordField.addActionListener(action);
+		submitButton.addActionListener(action); 
+		
 }
+	public void resetWindow()
+	{
+		usernameField.setText("");
+		usernameField.requestFocus();
+		passwordField.setText("");
+		wrongCredentialsLabel.setVisible(false);
+	}
 	
 	public void swapView(String key) 
 	{
