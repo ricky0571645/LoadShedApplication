@@ -11,9 +11,9 @@ void loop() {
                 // read the incoming byte:
                 incomingByte = Serial.read();
 
-                if(incomingByte == 'r')
+                if(incomingByte == 'd')
                    digitalWrite(13, HIGH);             
-                else if (incomingByte == 'g')
+                else if (incomingByte == 'e')
                   digitalWrite(11, HIGH);
                 else if (incomingByte == 'b')
                   digitalWrite(9, HIGH);

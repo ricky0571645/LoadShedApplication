@@ -7,9 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import users.UserList;
-import users.User;//--------------FOR DEBUGGING-----------
+import java.net.URL;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -20,6 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import users.User;//--------------FOR DEBUGGING-----------
+import users.UserList;
+import data.DataList;
 public class Window_Credential extends JFrame
 {
 	//-----------------------------------------------------------------
@@ -52,7 +54,6 @@ public class Window_Credential extends JFrame
 	
 	//Allows transition between windows
 	private Window_Credential tester;
-	private Window_Control controlPanel;
 	
 	//For row clarification
 	private static final int ROW1 = 0;
@@ -63,15 +64,19 @@ public class Window_Credential extends JFrame
 	
 	//include the userlist that will be used to verify the incoming user
 	private UserList employeeList = new UserList();
+	private DataList dataList = new DataList();
+	private User currentUser;
 	
 	
 	//--------------FOR DEBUGGING-----------
 	//--------------------------------------
 	boolean clickedTwice = false;
-	private User employee1 = new User("Ricky", "Software Developer", 100, "ricky", "apple");
-	private User employee2 = new User("Justin", "Software Developer", 101, "justin", "pear");
-	private User employee3 = new User("Marshall", "Hardware Engineer", 102, "marshall", "berry");
-	private User employee4 = new User("Julio", "Hardware Engineer", 103, "julio", "grape");
+	private User employee1 = new User("Ricky Martinez", "Administrator", "100", "ricky", "apple");
+	private User employee2 = new User("Justin Kelley", "Standard", "101", "justin", "pear");
+	private User employee3 = new User("Marshall Bauguss", "Standard", "102", "marshall", "berry");
+	private User employee4 = new User("Julio Crespo", "Standard", "103", "julio", "grape");
+	
+	private boolean poweredOn = true;
 	
 	
 	//-----------------------------------------------------------------
@@ -79,17 +84,20 @@ public class Window_Credential extends JFrame
 	//-----------------------------------------------------------------
 	public Window_Credential()
 	{	
-		super("Load Shed Controller");
+		super("Load Shed Controller 1.0");
 		contents = getContentPane();
 		tester = this;
+		
 		
 		credentialPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraint = new GridBagConstraints();
 		insets = new Insets(0,0,0,0);
 		
 		//declare the image as type imageIcon
-		logoImage = new ImageIcon("SACSTATE.png", "");
 		
+		URL url =getClass().getResource("SACSTATE.png");
+		logoImage = new ImageIcon(url);
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(url));
 		//created this to center image and button to the credential prompt
 		int imageButtonToLeft = 20;
 		
@@ -213,20 +221,23 @@ public class Window_Credential extends JFrame
 	    employeeList.addUser(employee2);//--------------FOR DEBUGGING-----------
 	    employeeList.addUser(employee3);//--------------FOR DEBUGGING-----------
 	    employeeList.addUser(employee4);//--------------FOR DEBUGGING-----------
+	    
 	    Action action = new AbstractAction()
 	    {
 	        public void actionPerformed(ActionEvent e)
 	        {
 	        	//click twice for debug//--------------FOR DEBUGGING-----------
-				if(clickedTwice || employeeList.isValidUser(usernameField.getText(), passwordField.getText()))
+				//if(clickedTwice || employeeList.isValidUser(usernameField.getText(), passwordField.getText()))
+				if(employeeList.isValidUser(usernameField.getText(), passwordField.getText()))
 				{
-					controlPanel = new Window_Control();
-					cards.add(controlPanel, "controlPanel");
-					controlPanel.setTester(tester);
+					currentUser = employeeList.getUser();
+					Panel_Control panel = new Panel_Control(employeeList, dataList, currentUser, poweredOn);
+					cards.add(panel, "controlPanel");
+					panel.setTester(tester);
 					swapView("controlPanel");
-					setSize(600, 500);
+					setSize(480, 480);
 					setVisible(true);
-					setResizable(true);
+					setResizable(false);
 					resetWindow();
 				}
 				else
@@ -243,7 +254,14 @@ public class Window_Credential extends JFrame
 		submitButton.addActionListener(action); 
 		
 }
-	public void resetWindow()
+	
+	
+	public void setPoweredOnValue(boolean isPoweredOn)
+	{
+		poweredOn = isPoweredOn;
+	}
+	
+	private void resetWindow()
 	{
 		usernameField.setText("");
 		usernameField.requestFocus();

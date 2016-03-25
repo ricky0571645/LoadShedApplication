@@ -26,6 +26,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import users.UserList;
+
 import com.fazecast.jSerialComm.SerialPort;
 
 
@@ -45,6 +47,7 @@ public class Window_Control extends JPanel
 	private JButton logOffButton;
 	private JButton powerOffButton;
 	private JButton powerOnButton;
+	private UserList employeeList;
 	
 	private Font fontGUI = new Font("Candara", Font.BOLD, 15);
 	//Middle buttons 
@@ -75,8 +78,9 @@ public class Window_Control extends JPanel
 	//-----------------------------------------------------------------
 	//---------------------------GUI SETUP-----------------------------
 	//-----------------------------------------------------------------
-	public Window_Control()
+	public Window_Control(final UserList employeeList)
 	{
+		this.employeeList = employeeList;
 		setLayout(new GridBagLayout());
 		GridBagConstraints constraint = new GridBagConstraints();
 		
@@ -266,6 +270,7 @@ public class Window_Control extends JPanel
 			}
 		}
 		
+		
 		//-----------------------------------------------------------------
 		//---------------------------BUTTON ACTION-------------------------
 		//-----------------------------------------------------------------
@@ -278,6 +283,7 @@ public class Window_Control extends JPanel
 				poweredOn = false;
 				statusImage.setIcon(disconnectStatusImage);
 				//and the arduino is connected
+				
 				if(arduinoConnected)
 				{
 					//send data 'd' to arduino to disable power
@@ -304,68 +310,8 @@ public class Window_Control extends JPanel
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				// create a new file
-				try {
-					//create a file, a workbook, and add the workbook to the file
-					Workbook wb = new XSSFWorkbook();
-					FileOutputStream reportFile = new FileOutputStream("reportFile.xlsx");
-					Sheet sheet = wb.createSheet("Report");
-					
-					//create two rows that we'll work with
-					Row row = sheet.createRow((short)0);
-					Row row2 = sheet.createRow((short)2);
-					
-					//create the report label creation date
-					row.createCell(5).setCellValue("Report Creation Date:");
-					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-					Date date = new Date();
-					//add the formatted date to the cell
-					row.createCell(6).setCellValue(dateFormat.format(date));
-					//size the cells to the width of the contents
-					sheet.autoSizeColumn(5);
-					sheet.autoSizeColumn(6);
-					
-					//merge the following cells together
-					sheet.addMergedRegion(new CellRangeAddress(
-				            2, //first row (0-based)
-				            2, //last row  (0-based)
-				            2, //first column (0-based)
-				            5  //last column  (0-based)
-				    ));
-					
-					row2.createCell(2).setCellValue("Load Shed Controller Report");
-					CellStyle cellStyle = wb.createCellStyle();
-					cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
-					row2.getCell(2).setCellStyle(cellStyle);
-					
-					CellStyle borderStyle = wb.createCellStyle();
-					borderStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
-					borderStyle.setBorderLeft(CellStyle.BORDER_MEDIUM);
-					borderStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
-					borderStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
-					
-					row.getCell(5).setCellStyle(borderStyle);
-					row.getCell(6).setCellStyle(borderStyle);
-					
-					
-					    
-					wb.write(reportFile);
-					reportFile.close();
-					
-					launchExcelReport();
-					
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				// create a new workbook
-				catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				// create a new sheet
-
+				Report_Excel report = new Report_Excel();
+				report.createExcelReport(employeeList);
 			}
 		});
 		
@@ -382,28 +328,6 @@ public class Window_Control extends JPanel
 			}
 		});
 
-	}
-	
-	public void launchExcelReport()
-	{
-		if (!Desktop.isDesktopSupported()) {
-	        System.err.println("Desktop not supported");
-	        // use alternative (Runtime.exec)
-	        return;
-	    }
-
-	    Desktop desktop = Desktop.getDesktop();
-	    if (!desktop.isSupported(Desktop.Action.EDIT)) {
-	        System.err.println("EDIT not supported");
-	        // use alternative (Runtime.exec)
-	        return;
-	    }
-
-	    try {
-	        desktop.open(new File("reportFile.xlsx"));
-	    } catch (IOException ex) {
-	        ex.printStackTrace();
-	    }
 	}
 	
 	

@@ -3,12 +3,12 @@ public class User
 {
 	//instance variables
 	private String name;
-	private String title;
-	private int badgeNumber;
+	private String userType;
+	private String badgeNumber;
 	private String password;
 	private String username;
 	
-	public User(String name, String title, int badgeNumber, String username, String password)
+	public User(String name, String title, String badgeNumber, String username, String password)
 	{
 		setName(name);
 		setTitle(title);
@@ -24,11 +24,11 @@ public class User
 		return name;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getUserType() {
+		return userType;
 	}
 
-	public int getBadgeNumber() {
+	public String getBadgeNumber() {
 		return badgeNumber;
 	}
 	
@@ -42,11 +42,11 @@ public class User
 		this.name = name;
 	}
 
-	private void setTitle(String title) {
-		this.title = title;
+	private void setTitle(String userType) {
+		this.userType = userType;
 	}
 
-	private void setBadgeNumber(int badgeNumber) {
+	private void setBadgeNumber(String badgeNumber) {
 		this.badgeNumber = badgeNumber;
 	}
 	
@@ -56,7 +56,7 @@ public class User
 	}
 		
 	//will utilize decryption methods
-	private void setPassword(String password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 	

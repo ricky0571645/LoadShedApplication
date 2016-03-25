@@ -11,16 +11,22 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.fazecast.jSerialComm.SerialPort;
+/*
+ * Author: Ricky A. Martinez
+ * Project Name: Senior Project Design; Load Shed Application
+ * Group: 4S
+ * Date Created: Spring 2016
+ */
+
+/*------------------------------------------
+ * ----------LOAD SHED APPLICATION----------
+ -------------------------------------------*/
+
 public class Main extends JFrame
 {
-	public Main ()
-	{
-			
-	}
-	//launches the credential window
 	public static void main (String args[])
 	{
+		//launch the credential window
 		Window_Credential initialView = new Window_Credential();
-		//Window_Control controlView = new Window_Control();
 	}
 }
