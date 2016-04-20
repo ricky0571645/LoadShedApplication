@@ -195,7 +195,8 @@ public class Panel_Control extends JPanel
 		for(SerialPort port : ports)
 		{
 			System.out.println(port.getSystemPortName() + "\n");
-			if(port.getSystemPortName().equalsIgnoreCase("COM3") || port.getSystemPortName().equalsIgnoreCase("COM4"))
+			if(port.getSystemPortName().equalsIgnoreCase("COM3") || port.getSystemPortName().equalsIgnoreCase("COM4")
+					|| port.getSystemPortName().equalsIgnoreCase("COM5"))
 			{
 				//if the port name is COM3 then the Arduino is connected
 				arduinoConnected = true;
@@ -358,6 +359,7 @@ public class Panel_Control extends JPanel
 		if(arduinoConnected)
 		{
 			serialPort.closePort();
+			System.out.println("Port Closed");
 		}
 	}
 	//allows for switching between cards
