@@ -52,6 +52,8 @@ public class Panel_Control extends JPanel
 	
 	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
 	
+	SerialPort arduinoPort;
+	
 
 	//-----------------------------------------------------------------
 	//---------------------------GUI SETUP-----------------------------
@@ -112,6 +114,7 @@ public class Panel_Control extends JPanel
 		
 		//button for monitoring the system
 		JButton monitorButton = new JButton("Sensor Data");
+		
 		monitorButton.setIcon(smallSensorImage);
 		monitorButton.setFont(new Font("Calibri", Font.BOLD, 16));
 		monitorButton.setBorder(emptyBorder);
@@ -182,12 +185,11 @@ public class Panel_Control extends JPanel
 						
 			    
 	    //find which port belongs to the Arduino
-		int arduinoPort = 0;
 		//incrementer for different ports
 		int i = 0;
 		//check whether the arduino is connected
 		arduinoConnected = false;
-		
+		arduinoPort = null;
 		//get the ports on the computer
 		SerialPort[] ports = SerialPort.getCommPorts();
 		//will display the ports we have
@@ -202,7 +204,7 @@ public class Panel_Control extends JPanel
 				arduinoConnected = true;
 				arduinoConnectedLabel.setText("Arduino Connected");
 				arduinoConnectedLabel.setForeground(Color.green);
-				arduinoPort = i;
+				this.arduinoPort = ports[i];
 			}
 			//increment the ports if any
 			i++;
@@ -212,7 +214,7 @@ public class Panel_Control extends JPanel
 		//if the arduino is connected do the following
 		if(arduinoConnected)
 		{
-			serialPort = ports[arduinoPort];
+			serialPort = arduinoPort;
 			//check whether port can open
 			if(serialPort.openPort())
 			{
@@ -246,7 +248,21 @@ public class Panel_Control extends JPanel
 		});
 				
 				
-		
+		monitorButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				Panel_Monitor monitorPanel = new Panel_Monitor(arduinoPort);
+				closePort();
+				if(tester != null)
+				{
+					monitorPanel.setTester(tester);
+					tester.getCards().add(monitorPanel, "monitorPanel");
+					tester.swapView("monitorPanel");
+					tester.setSize(450, 320);
+				}
+			}
+		});
 		
 		//create the excel report
 		reportButton.addActionListener(new ActionListener() 
@@ -275,6 +291,7 @@ public class Panel_Control extends JPanel
 			}
 		});
 		
+		//log off and go back to the credential window
 		logOffButton.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent e) 
@@ -354,6 +371,7 @@ public class Panel_Control extends JPanel
 
 	}
 	
+	//close the port so that it's no longer used by the program.
 	private void closePort()
 	{
 		if(arduinoConnected)
