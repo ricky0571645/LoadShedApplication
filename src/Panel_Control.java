@@ -54,7 +54,6 @@ public class Panel_Control extends JPanel
 	
 	SerialPort arduinoPort;
 	
-
 	//-----------------------------------------------------------------
 	//---------------------------GUI SETUP-----------------------------
 	//-----------------------------------------------------------------
@@ -227,6 +226,8 @@ public class Panel_Control extends JPanel
 			}
 		}
 		
+		//classes needed for switching windows
+		
 		//-----------------------------------------------------------------
 		//---------------------------BUTTON ACTION-------------------------
 		//-----------------------------------------------------------------
@@ -236,9 +237,10 @@ public class Panel_Control extends JPanel
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				Panel_UserSelection userSelectionPanel = new Panel_UserSelection(employeeList, currentUser);
+				
 				if(tester != null)
 				{
+					Panel_UserSelection userSelectionPanel = new Panel_UserSelection(employeeList, currentUser);
 					userSelectionPanel.setTester(tester);
 					tester.getCards().add(userSelectionPanel, "userModPanel");
 					tester.swapView("userModPanel");
@@ -252,10 +254,10 @@ public class Panel_Control extends JPanel
 		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				Panel_Monitor monitorPanel = new Panel_Monitor(arduinoPort);
-				closePort();
+				//closePort();
 				if(tester != null)
 				{
+					Panel_Monitor monitorPanel = monitorPanel = new Panel_Monitor(arduinoPort);
 					monitorPanel.setTester(tester);
 					tester.getCards().add(monitorPanel, "monitorPanel");
 					tester.swapView("monitorPanel");
@@ -280,9 +282,10 @@ public class Panel_Control extends JPanel
 			
 			public void actionPerformed(ActionEvent e) 
 			{
-				Panel_PasswordModifier passwordPanel = new Panel_PasswordModifier(employeeList, currentUser);
+				
 				if(tester != null)
 				{
+					Panel_PasswordModifier passwordPanel = new Panel_PasswordModifier(employeeList, currentUser);
 					passwordPanel.setTester(tester);
 					tester.getCards().add(passwordPanel, "passwordPanel");
 					tester.swapView("passwordPanel");
@@ -377,7 +380,7 @@ public class Panel_Control extends JPanel
 		if(arduinoConnected)
 		{
 			serialPort.closePort();
-			System.out.println("Port Closed");
+			System.out.println("Port Closed poop");
 		}
 	}
 	//allows for switching between cards

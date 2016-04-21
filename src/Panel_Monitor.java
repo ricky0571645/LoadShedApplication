@@ -82,20 +82,21 @@ public class Panel_Monitor extends JPanel {
 //                return;
 //        }
 //        port.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
-       
+		
         // enter into an infinite loop that reads from the port and updates the GUI
 		if(arduinoPort != null)
         {
 			Scanner data = new Scanner(arduinoPort.getInputStream());
-			while(data.hasNextLine()) 
-	        {
-	            lblBoxConnected.setText(data.nextLine());
-	        }
+			if(data.hasNextLine())
+			{
+				String temp = data.nextLine();
+				System.out.println(temp);
+				String temp2 = new StringBuilder().append(temp.charAt(3)).append(temp.charAt(4)).append(temp.charAt(5)).toString();
+				System.out.println(temp2);
+				lblNewLabel.setText(temp2);
+			}
         }
-        
         //see if you can read in values
-        
-
 	}
 	
 	//alows for switching between cards
