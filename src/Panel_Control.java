@@ -197,7 +197,7 @@ public class Panel_Control extends JPanel
 		{
 			System.out.println(port.getSystemPortName() + "\n");
 			if(port.getSystemPortName().equalsIgnoreCase("COM3") || port.getSystemPortName().equalsIgnoreCase("COM4")
-					|| port.getSystemPortName().equalsIgnoreCase("COM5"))
+					|| port.getSystemPortName().equalsIgnoreCase("COM5") || port.getSystemPortName().equalsIgnoreCase("COM14"))
 			{
 				//if the port name is COM3 then the Arduino is connected
 				arduinoConnected = true;
@@ -331,7 +331,7 @@ public class Panel_Control extends JPanel
 					if(arduinoConnected)
 					{
 						//send data 'd' to arduino to disable power
-						byte buffer[] = {'e'};
+						byte buffer[] = {'d'};
 						int bytesToWrite = buffer.length;
 						serialPort.writeBytes(buffer, bytesToWrite);
 					}
@@ -364,7 +364,7 @@ public class Panel_Control extends JPanel
 					if(arduinoConnected)
 					{
 						//send data 'd' to arduino to disable power
-						byte buffer[] = {'d'};
+						byte buffer[] = {'e'};
 						int bytesToWrite = buffer.length;
 						serialPort.writeBytes(buffer, bytesToWrite);
 					}
